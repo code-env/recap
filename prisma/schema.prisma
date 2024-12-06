@@ -11,11 +11,10 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  name      String
+model CommitData {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  data      Json     @db.JsonB
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@index([name])
 }
