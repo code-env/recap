@@ -1,4 +1,8 @@
-import { getFollowersGainedThisYear, getMonthlyCommitsData } from "@/lib/github"
+import {
+  getFollowersGainedThisYear,
+  getMonthlyCommitsData,
+  getYearlyGitHubStats,
+} from "@/lib/github"
 import { z } from "zod"
 import { router } from "../__internals/router"
 import { publicProcedure } from "../procedures"
@@ -12,6 +16,12 @@ export const githubRouter = router({
         username,
         process.env.GITHUB_TOKEN as string
       )
+      const yearlyStats = await getYearlyGitHubStats(
+        username,
+        process.env.GITHUB_TOKEN as string
+      )
+
+      console.log(yearlyStats)
 
       const followersGainedThisYear = await getFollowersGainedThisYear(
         username,
