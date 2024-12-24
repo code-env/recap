@@ -36,7 +36,7 @@ const chartConfig = {
 
 export function CommitGraph({ data }: { data: CommitData[] }) {
   return (
-    <Card className="w-full">
+    <Card className="w-full shadow-none">
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart

@@ -1,11 +1,8 @@
-import {
-  getFollowersGainedThisYear,
-  getMonthlyCommitsData,
-  getYearlyGitHubStats,
-} from "@/lib/github"
+import { getMonthlyCommitsData, getYearlyGitHubStats } from "@/lib/github"
 import { z } from "zod"
 import { router } from "../__internals/router"
 import { publicProcedure } from "../procedures"
+import { format } from "date-fns"
 
 export const githubRouter = router({
   getUser: publicProcedure
@@ -21,16 +18,55 @@ export const githubRouter = router({
         process.env.GITHUB_TOKEN as string
       )
 
-      console.log(yearlyStats)
+      const user = yearlyStats.user.data
 
-      const followersGainedThisYear = await getFollowersGainedThisYear(
-        username,
-        process.env.GITHUB_TOKEN as string,
-        new Date().getFullYear()
-      )
       return c.superjson({
         commitsData,
-        followersGainedThisYear,
+        yearlyStats,
+        user: {
+          name: user.name,
+          username: user.login,
+          bio: user.bio,
+          avatar: user.avatar_url,
+          company: user.company,
+          location: user.location,
+          joinedDate: user.created_at,
+          following: user.following,
+          followers: user.followers,
+          repositories: user.public_repos,
+        },
+        stats: [
+          {
+            title: "Total commits",
+            value: yearlyStats.totalCommits,
+            // icon: UserIcon,
+          },
+          {
+            title: "Most Starred Repo",
+            value: yearlyStats.mostStarredRepo,
+            // icon: UserIcon,
+          },
+          {
+            title: "Most Committed Repo",
+            value: yearlyStats.mostCommittedRepo,
+            // icon: UserIcon,
+          },
+          {
+            title: "Top Language",
+            value: yearlyStats.topLanguage,
+            // icon: UserIcon,
+          },
+          {
+            title: "Most Productive Day",
+            value: yearlyStats.mostProductiveDay,
+            // icon: UserIcon,
+          },
+          {
+            title: "Total Forks",
+            value: yearlyStats.totalForks,
+            // icon: UserIcon,
+          },
+        ],
       })
     }),
 })

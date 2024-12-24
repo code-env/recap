@@ -1,12 +1,20 @@
+import { ModeToggle } from "@/components/mode-toggle"
 import UsernameForm from "@/components/user-name-form"
-import UserProfile from "@/components/user-profile"
-import React from "react"
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 
 const Page = () => {
   return (
     <div className="min-h-screen flex items-center flex-col gap-10 py-20">
-      {/* <UsernameForm /> */}
-      <UserProfile />
+      <UsernameForm />
+      <div className="absolute top-4 right-4 text-primary border-border flex gap-2 items-center">
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+        <ModeToggle />
+      </div>
     </div>
   )
 }
