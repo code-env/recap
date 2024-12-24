@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.9.6",
+    "@clerk/types": "^4.40.0",
     "@hookform/resolvers": "^3.9.1",
     "@neondatabase/serverless": "^0.9.4",
     "@prisma/adapter-neon": "^5.18.0",

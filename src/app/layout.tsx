@@ -1,9 +1,8 @@
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import { Providers } from "./components/providers"
-import { EB_Garamond } from "next/font/google"
 import { cn } from "@/utils"
 import { ClerkProvider } from "@clerk/nextjs"
+import type { Metadata } from "next"
+import { EB_Garamond, Inter } from "next/font/google"
+import { Providers } from "./components/providers"
 
 import "./globals.css"
 
