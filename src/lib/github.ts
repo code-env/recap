@@ -52,7 +52,7 @@ export const getMonthlyCommitsData = async (
       }
     }
 
-    console.log({ totalCommits })
+    // console.log({ totalCommits })
 
     return commitsCount
   } catch (error) {
@@ -92,8 +92,6 @@ export const getYearlyGitHubStats = async (username: string, token: string) => {
     })
 
     const user = await octokit.rest.users.getByUsername({ username })
-
-    console.log({ user })
 
     const repoData = repos.data
 
@@ -202,6 +200,7 @@ export const getYearlyGitHubStats = async (username: string, token: string) => {
       Object.entries(languageUsage).sort((a, b) => b[1] - a[1])[0] || null
 
     return {
+      user,
       totalCommits,
       mostCommittedRepo,
       mostStarredRepo,

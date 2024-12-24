@@ -1,76 +1,99 @@
 "use client"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Building2, MapPin, CalendarClock } from "lucide-react"
-import { Card } from "./ui/card"
+import { CommitData, StatsData, UserData } from "@/lib/type"
+import { format } from "date-fns"
+import { Building2, CalendarClock, MapPin } from "lucide-react"
 import { CommitGraph } from "./commit-graph"
+import { Card } from "./ui/card"
+interface UserProfileProps {
+  userData: UserData
+  statsData: StatsData[]
+  commitsData: CommitData[]
+}
+const UserProfile = ({
+  userData,
+  statsData,
+  commitsData,
+}: UserProfileProps) => {
+  const profileName = userData.name.split(" ").map((name) => name.charAt(0))
 
-const nothingData = [
-  { title: "Total commits", value: 599 },
-  { title: "Total repositories", value: 10 },
-  { title: "Total stars", value: 100 },
-  { title: "Top language", value: "TypeScript" },
-  { title: "Most productive day", value: "2024-01-01" },
-  { title: "Total forks", value: 100 },
-]
+  // console.log(userData.repositories)
 
-const UserProfile = () => {
   return (
     <div>
-      {/* user avatar */}
       <div className="flex flex-col items-center justify-center gap-4">
-        <Avatar className="size-24 rounded-full flex items-center justify-center overflow-hidden border-brand-600 border-4">
+        <Avatar className="size-24 rounded-full flex items-center justify-center overflow-hidden border-primary border-4">
           <AvatarImage
-            src="https://github.com/shadcn.png"
+            src={userData.avatar}
             className="object-cover size-full"
           />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>{profileName}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col items-center">
-          <h1 className="text-2xl font-semibold">Bossadi Zenith</h1>
-          <p className="text-sm text-gray-500">@code-env</p>
-          <p className="text-sm text-gray-500">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sequi rem
-            numquam magni aut, repudiandae
-          </p>
+          <h1 className="text-2xl font-semibold text-primary">
+            {userData.name}
+          </h1>
+          <p className="text-sm text-muted-foreground">@{userData.username}</p>
+          <p className="text-sm text-muted-foreground">{userData.bio}</p>
         </div>
         <div className="flex items-center gap-4">
           <p className="text-sm text-gray-500 flex items-center gap-2">
             <Building2 className="size-4" />
-            <span>Code Env</span>
+            <span>{userData.company}</span>
           </p>
           <p className="text-sm text-gray-500 flex items-center gap-2">
             <MapPin className="size-4" />
-            <span>Cameroon</span>
+            <span>{userData.location}</span>
           </p>
           <p className="text-sm text-gray-500 flex items-center gap-2">
             <CalendarClock className="size-4" />
-            <span>Joined 2024</span>
+            <span>
+              Joined {format(new Date(userData.joinedDate), "MMMM d, yyyy")}
+            </span>
           </p>
         </div>
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 border border-gray-200 rounded-md p-2">
-            <p className="text-sm font-semibold">10</p>
-            <p className="text-sm text-gray-500">Following</p>
+          <div className="flex items-center gap-2 border border-border rounded-md p-2">
+            <p className="text-sm font-semibold text-primary">
+              {userData.following}
+            </p>
+            <p className="text-sm text-muted-foreground">Following</p>
           </div>
-          <div className="flex items-center gap-2 border border-gray-200 rounded-md p-2">
-            <p className="text-sm font-semibold">10</p>
-            <p className="text-sm text-gray-500">Followers</p>
+          <div className="flex items-center gap-2 border border-border rounded-md p-2">
+            <p className="text-sm font-semibold text-primary">
+              {userData.followers}
+            </p>
+            <p className="text-sm text-muted-foreground">Followers</p>
           </div>
-          <div className="flex items-center gap-2 border border-gray-200 rounded-md p-2">
-            <p className="text-sm font-semibold">10</p>
-            <p className="text-sm text-gray-500">Repos</p>
+          <div className="flex items-center gap-2 border border-border rounded-md p-2">
+            <p className="text-sm font-semibold text-primary">
+              {userData.repositories}
+            </p>
+            <p className="text-sm text-muted-foreground">Repos</p>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-4">
-          {nothingData.map((item, index) => (
-            <Card className="p-4" key={index}>
-              <p className="text-sm font-semibold">{item.value}</p>
-              <p className="text-sm text-gray-500">{item.title}</p>
-            </Card>
-          ))}
+        <div className="grid grid-cols-3 gap-4 w-full">
+          {statsData.map((item, index) => {
+            const value = item.value.toString().split(",")[0]
+
+            const isValidDate = !isNaN(new Date(value).getTime())
+            const realDate = isValidDate
+              ? format(new Date(value), "MMMM d, yyyy")
+              : value
+
+            return (
+              <Card className="p-4 shadow-none flex flex-col gap-2" key={index}>
+                <div className="flex items-center justify-between">
+                  <p className="text-gray-500 text-sm">{item.title}</p>
+                  {/* <item.icon className="size-4" /> */}
+                </div>
+                <p className="text-sm font-semibold">{value}</p>
+              </Card>
+            )
+          })}
         </div>
-        <CommitGraph data={[]} />
+        <CommitGraph data={commitsData} />
       </div>
     </div>
   )
